@@ -1,0 +1,19 @@
+
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <p>Список wiki:</p>
+    <ul>
+        
+        {% for wiki in wikies %}
+            {% if wiki.parent is empty %}
+                <li> <a href="{{wiki.address}}">{{wiki.title}}</a></li>
+            {% else %}
+                <li> <a href="{{wiki.parent}}/{{wiki.address}}">{{wiki.title}}</a></li>
+            {% endif %}    
+        {% endfor %}
+    </ul> 
+     <p>	
+	   <div>Add wiki: <a href="{{path('create_first_wiki')}}">add</a></div>
+    </p>   
+{% endblock %}  

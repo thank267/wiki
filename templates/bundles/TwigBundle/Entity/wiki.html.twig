@@ -1,0 +1,44 @@
+
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div>Wiki address: {{ wiki.address }}</div>
+
+    {% if wiki.parent%}
+        <div>Parent wiki:<a href="{{path('view_wiki',{page: wiki.parent})}}">parent</a></div>
+    {% endif %}
+    <div>Wiki title: {{ wiki.title }}</div>
+    <div>
+        <p>Wiki description:</p>
+        {% apply markdown_to_html %}
+            {{ wiki.description}}
+        {% endapply %}
+    </div>
+   
+    {% if wiki.parent is empty %}
+        {% if wiki.children%}
+        <div>children wiki:</div>
+        <ul>
+            {% for child in wiki.children %}
+                <li> <a href="{{path('view_wiki',{page: wiki.address~'/'~child})}}">child</a></li>
+            {% endfor %}
+        </ul>
+     {% endif %}
+        <div>Add wiki: <a href="{{path('create_wiki',{page: wiki.address})}}">add</a></div>
+        <div>Edit wiki: <a href="{{path('edit_wiki',{page: wiki.address})}}">edit</a></div>
+        <div>Delete wiki: <a href="{{path('delete_wiki',{page: wiki.address})}}">delete</a></div>
+    {% else %}
+        {% if wiki.children%}
+        <ul>
+            {% for child in wiki.children %}
+                <li> <a href="{{path('view_wiki',{page: wiki.parent~'/'~wiki.address~'/'~child})}}">child</a></li>
+            {% endfor %}
+        </ul>
+     {% endif %}
+        <div>Add wiki: <a href="{{path('create_wiki',{page:  wiki.parent~'/'~wiki.address})}}">add</a></div>
+        <div>Edit wiki: <a href="{{path('edit_wiki',{page:  wiki.parent~'/'~wiki.address})}}">edit</a></div>
+        <div>Delete wiki: <a href="{{path('delete_wiki',{page: wiki.parent~'/'~wiki.address})}}">delete</a></div>
+    {% endif %}  
+    
+{% endblock %}
